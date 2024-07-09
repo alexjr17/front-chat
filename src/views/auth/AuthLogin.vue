@@ -1,16 +1,25 @@
 <template>
-  <div>
+  <div class="container-auth">
     <h2>Login</h2>
-    <form @submit="login">
-      <div>
-        <label for="username">Nombre usuario:</label>
-        <input type="text" id="username" v-model="username" required />
+    <form @submit.prevent="login">
+      <div data-mdb-input-init class="form-outline mb-4">
+        <label class="form-label" for="form1Example1">Usuario</label>
+        <input type="text" id="username" class="form-control" v-model="username" required/>
       </div>
-      <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" v-model="password" required />
+
+      <!-- Password input -->
+      <div data-mdb-input-init class="form-outline mb-4">
+        <label class="form-label" for="form1Example2">Password</label>
+        <input type="password" class="form-control" id="password" v-model="password" required/>
       </div>
-      <button type="submit">Login</button>
+
+      <!-- Alert for errors -->
+      <div v-if="errorMessage" class="alert alert-danger" role="alert">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Submit button -->
+      <button data-mdb-ripple-init type="submit" class="btn btn-primary btn-block">Sign in</button>
       <div class="link">
         <span>Don't have an account?</span> <router-link to="/register">Register</router-link>
       </div>
@@ -25,10 +34,10 @@ import { useRouter } from 'vue-router';
 
 const username = ref('');
 const password = ref('');
+const errorMessage = ref('');
 const router = useRouter();
 
-const login = async (event) => {
-  event.preventDefault();
+const login = async () => {
   try {
     const response = await axios2.post('/auth/login', {
       username: username.value,
@@ -37,21 +46,34 @@ const login = async (event) => {
     const { token, user } = response.data;
     localStorage.setItem('accessToken', token);
     localStorage.setItem('user', JSON.stringify(user));
-    router.push('/chat');
+    
+    if(token){
+      setTimeout(() => {
+        router.push('/chat');
+      }, 1000);
+    }
   } catch (error) {
+    if (error.response && (error.response.status === 401 || error.response.status === 400)) {
+      errorMessage.value = 'Credenciales incorrectas. Por favor, inténtelo de nuevo.';
+    } else {
+      errorMessage.value = 'Error al iniciar sesión. Por favor, inténtelo de nuevo más tarde.';
+    }
     console.log('Login failed:', error);
   }
 };
 </script>
 
-<style>
-/* Estilos de Bootstrap */
-.container {
-  max-width: 400px;
-  margin: auto;
+<style scoped>
+.container-auth {
+  width: 40% !important;
+  max-width: 80% !important;
   padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: auto;
 }
-.form-control {
-  margin-bottom: 10px;
+.alert {
+  margin-top: 10px;
 }
 </style>

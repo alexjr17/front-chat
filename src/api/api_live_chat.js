@@ -1,40 +1,48 @@
-import axios from 'axios'
-// import { useRoute, useRouter } from 'vue-router';
-// const router = useRouter();
-
-// const route = useRoute();
+import axios from 'axios';
 
 const axiosIns = axios.create({
   baseURL: 'http://127.0.0.1:5000/api',
-})
-
-
-// ℹ️ Add request interceptor to send the authorization header on each subsequent request after login
-axiosIns.interceptors.request.use(config => {
-
-  // Retrieve token from localStorage
-  const token = localStorage.getItem('accessToken');
-  if (token != null) {
-    // Get request headers and if headers is undefined assign blank object
-    config.headers = config.headers || {}
-    config.headers.Authorization = token != null ? token : '';
-  }
-  
-  return config
-})
-
-// handle 401 response
-axiosIns.interceptors.response.use(response => {
-  return response;
-}, error => {
-  if (error.response.status === 401) {
-    window.location.href = '/login';
-  } else if (error.response.status === 500 && error.response.data.message === "Token has expired") {
-    // localStorage.removeItem('account');
-    window.location.href = '/login';
-  } else {
-    return Promise.reject(error);
-  }
 });
 
-export default axiosIns
+// Add request interceptor
+axiosIns.interceptors.request.use(config => {
+  // Retrieve token from localStorage
+  const token = localStorage.getItem('accessToken');
+  if (token) {
+    // Attach token to headers
+    config.headers.Authorization = `${token}`;
+    // window.location.href = '/chat';
+
+  }
+  return config;
+}, error => {
+  return Promise.reject(error);
+});
+
+// Handle response errors
+axiosIns.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response) {
+      if (error.response.status === 401 || error.response.status === 403) {
+
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('user');
+        
+        window.location.href = '/login';
+      } else if (error.response.status === 500 &&error.response.data.message !== undefined && error.response.data.message === 'Token has expired') {
+
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('user');
+        
+        window.location.href = '/login';
+      } else {
+        return Promise.reject(error);
+      }
+    } else {
+      return Promise.reject(error);
+    }
+  }
+);
+
+export default axiosIns;

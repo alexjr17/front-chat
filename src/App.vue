@@ -1,9 +1,7 @@
 <template>
-  <div id="app">
-    <div class="container">
+    <!-- <div class="container"> -->
       <router-view/>
-    </div>
-  </div>
+    <!-- </div> -->
 </template>
 
 <script>
@@ -15,20 +13,13 @@
 #app {
   font-family: 'Arial', sans-serif;
   background-color: #f4f4f4;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.container {
-  width: 100%;
-  max-width: 400px;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+
 
 h2 {
   margin-bottom: 20px;
