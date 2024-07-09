@@ -1,6 +1,6 @@
 <template>
     <div class="container-chat row">
-      <div class="col-7 ">
+      <div class="col-sm-12 col-md-7">
         <iframe
           class="video-frame rounded-3"
           src="https://www.youtube.com/embed/zLX_GcXt2pI"
@@ -10,7 +10,7 @@
           allowfullscreen
         ></iframe>
       </div>
-      <div class="col-5 pe-3 px-0">
+      <div class="col-sm-12  col-md-5 pe-3 px-0">
         <div class="card p-0" id="chat2">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Chat</h5>
@@ -54,7 +54,6 @@
               </div>
             </div>
           </div>
-
 
           <form @submit.prevent="sendMessage" >
             <div class="card-footer text-muted d-flex flex-row gap-2">
@@ -185,7 +184,6 @@ margin: 1rem;
 background: #eee;
 }
 
-/* Estilos de Bootstrap */
 .container-chat {
   width: 90% !important;
   max-width: 100% !important;

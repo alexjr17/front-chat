@@ -1,6 +1,6 @@
 <template>
   <div class="container-auth">
-    <h2>Login</h2>
+    <h2>Inicia sesión</h2>
     <form @submit.prevent="login">
       <div data-mdb-input-init class="form-outline mb-4">
         <label class="form-label" for="form1Example1">Usuario</label>
@@ -19,9 +19,9 @@
       </div>
 
       <!-- Submit button -->
-      <button data-mdb-ripple-init type="submit" class="btn btn-primary btn-block">Sign in</button>
+      <button data-mdb-ripple-init type="submit" class="btn btn-primary btn-block">Inicia sesión</button>
       <div class="link">
-        <span>Don't have an account?</span> <router-link to="/register">Register</router-link>
+        <span>¿No tienes una cuenta?</span> <router-link to="/register">Regístrate</router-link>
       </div>
     </form>
   </div>
